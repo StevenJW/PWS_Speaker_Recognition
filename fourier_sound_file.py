@@ -5,7 +5,8 @@ import numpy as np
 import wave
 import sys
 
-spf = wave.open('AudioFiles/Asteven1.wav','r')
+audiofile = 'AudioFiles/Asteven1.wav'
+spf = wave.open(audiofile,'r')
 
 #Extract Raw Audio from Wav File
 signal = spf.readframes(-1)
@@ -17,7 +18,7 @@ fft_out = fft(signal)
 Time=np.linspace(0, len(signal)/fs, num=len(signal))
 
 plt.figure(1)
-plt.title('Signal Wave...')
+plt.title(audiofile)
 plt.plot(Time,np.abs(fft_out))
 plt.show()
 
