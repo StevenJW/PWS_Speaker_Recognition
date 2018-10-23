@@ -17,19 +17,19 @@ neurons = 800
 activation_func = 'relu'
 
 model = Sequential()
-model.add(Dense(neurons, kernel_initializer="uniform", input_dim=neurons))
-model.add(Activation(activation_func))
+# Input layer
+model.add(Dense(neurons, kernel_initializer="uniform", input_dim=neurons, activation=activation_func))
+# First hidden layer
+model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
 model.add(Dropout(0.2))
-model.add(Dense(neurons, kernel_initializer="uniform"))
-model.add(Activation(activation_func))
+# Second hidden layer
+model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
 model.add(Dropout(0.2))
-model.add(Dense(neurons, kernel_initializer="uniform"))
-model.add(Activation(activation_func))
-model.add(Dense(1, kernel_initializer="uniform"))
-model.add(Activation('sigmoid'))
+# Output layer
+model.add(Dense(1, kernel_initializer="uniform", activation='sigmoid'))
 
-model.compile(loss='binary_crossentropy', optimizer='adam')
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=100, batch_size=5)
+model.fit(x_train, y_train, epochs=10, batch_size=5)
 score = model.evaluate(x_test, y_test, batch_size=1)
 print(score)
