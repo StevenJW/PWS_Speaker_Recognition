@@ -1,7 +1,6 @@
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
 import pickle
-from data_conversion import convert_train_data
 
 # Train data
 f = open('store1.pckl', 'rb')
@@ -30,6 +29,6 @@ model.add(Dense(1, kernel_initializer="uniform", activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(x_train, y_train, epochs=10, batch_size=5)
+model.fit(x_train, y_train, epochs=12, batch_size=5, validation_data=(x_test, y_test))
 score = model.evaluate(x_test, y_test, batch_size=1)
 print(score)
