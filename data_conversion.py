@@ -7,47 +7,56 @@ import numpy as np
 import wave
 import sys
 
+def convert_train_data(audioVowel):
+	temp_train = np.empty(shape=[0, 2])
+	list_train = []
+	list_train, y_data = convert_train_data_from('steven', audioVowel, list_train)
+	temp_train = np.append(temp_train, y_data, axis=0)
 
-x = 1
-y_train = np.empty(shape=[0, 2])
-list_train = []
-while True:
-	audiofile = 'AudioFiles/Ematthijs'+ str(x) + '.wav'
-	if Path(audiofile).is_file():
-		spf = wave.open(audiofile,'r')
-	else: 
-		break
+	list_train, y_data = convert_train_data_from('matthijs', audioVowel, list_train)
+	temp_train = np.append(temp_train, y_data, axis=0)
 
-	#Extract Raw Audio from Wav File
-	signal = spf.readframes(-1)
-	signal = np.fromstring(signal, 'Int16')
-	fs = spf.getframerate()
-	# Time and fft
-	fft_out = fft(signal)
-	Time=np.linspace(0, len(signal)/fs, num=len(signal))
+	return np.array(list_train), temp_train
 
-	# Get corresponding y values
-	xvalues = Time
-	yvalues = np.abs(fft_out)
-
-	goodvalues = int(181855 / 4)
-
-	# Create new array for new graph of values
-	yArrayValues = []
-	for i in range(0, int(goodvalues*0.14), 4):
-		idx = np.where(xvalues==xvalues[i])
-		yArrayValues.append(yvalues[idx]/(1* (10**7)))
-		if i == 3196:
+def convert_train_data_from(audioFileName, vowel, data_list):
+	x = 1
+	temp2_train = np.empty(shape=[0, 2])
+	while True:
+		audiofile = 'AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
+		if Path(audiofile).is_file():
+			spf = wave.open(audiofile,'r')
+		else: 
 			break
 
+		#Extract Raw Audio from Wav File
+		signal = spf.readframes(-1)
+		signal = np.fromstring(signal, 'Int16')
+		fs = spf.getframerate()
+		# Time and fft
+		fft_out = fft(signal)
+		Time=np.linspace(0, len(signal)/fs, num=len(signal))
 
-	xarray = range(len(yArrayValues))
-	plt.plot(xarray, yArrayValues)
-	list_train.append(yArrayValues)
-	y_train = np.append(y_train, [[1, 0]], axis=0)
-	x += 1
+		# Get corresponding y values
+		xvalues = Time
+		yvalues = np.abs(fft_out)
 
-#plt.show()
-x_train = np.array(list_train)
-print(x_train)
-print(y_train)
+		goodvalues = int(181855 / 4)
+
+		# Create new array for new graph of values
+		yArrayValues = []
+		for i in range(0, int(goodvalues*0.14), 4):
+			idx = np.where(xvalues==xvalues[i])
+			yArrayValues.append(yvalues[idx]/(1* (10**7)))
+			if i == 3196:
+				break
+
+
+		xarray = range(len(yArrayValues))
+		plt.plot(xarray, yArrayValues)
+		data_list.append(yArrayValues)
+		if audioFileName == 'matthijs':
+			temp2_train = np.append(temp2_train, [[1, 0]], axis=0)
+		else:
+			temp2_train = np.append(temp2_train, [[0, 1]], axis=0)
+		x += 1
+	return data_list, temp2_train
