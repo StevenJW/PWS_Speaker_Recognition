@@ -1,17 +1,20 @@
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
+from data_conversion import convert_train_data
+
+x_train, y_train = convert_train_data('E')
 
 model = Sequential()
-model.add(Dense(64, input_dim=20, init='uniform'))
-model.add(Activation('tanh'))
+model.add(Dense(800, input_dim=800, init='uniform'))
+model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(64, init='uniform'))
-model.add(Activation('tanh'))
+model.add(Dense(800, init='uniform'))
+model.add(Activation('relu'))
 model.add(Dropout(0.5))
 model.add(Dense(2, init='uniform'))
 model.add(Activation('softmax'))
 
-model.compile(loss='mean_squared_error', optimizer=sgd)
+model.compile(loss='mean_squared_error', optimizer='adam')
 
-model.fit(X_train, y_train, nb_epoch=20, batch_size=16)
-score = model.evaluate(X_test, y_test, batch_size=16)
+model.fit(x_train, y_train, epochs=1, batch_size=1)
+#score = model.evaluate(X_test, y_test, batch_size=16)

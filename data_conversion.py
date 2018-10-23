@@ -46,7 +46,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		yArrayValues = []
 		for i in range(0, int(goodvalues*0.14), 4):
 			idx = np.where(xvalues==xvalues[i])
-			yArrayValues.append(yvalues[idx]/(1* (10**7)))
+			yArrayValues.extend(yvalues[idx]/(1* (10**7)))
 			if i == 3196:
 				break
 
