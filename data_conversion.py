@@ -6,21 +6,22 @@ from pathlib import Path
 import numpy as np
 import wave
 import sys
+import pickle
 
 def convert_train_data(audioVowel):
-	temp_train = np.empty(shape=[0, 2])
+	temp_train = []
 	list_train = []
-	list_train, y_data = convert_train_data_from('steven', audioVowel, list_train)
-	temp_train = np.append(temp_train, y_data, axis=0)
+	list_train, y_data = convert_train_data_from('stevenTest', audioVowel, list_train)
+	temp_train.extend(y_data)
 
-	list_train, y_data = convert_train_data_from('matthijs', audioVowel, list_train)
-	temp_train = np.append(temp_train, y_data, axis=0)
-
-	return np.array(list_train), temp_train
+	list_train, y_data = convert_train_data_from('matthijsTest', audioVowel, list_train)
+	temp_train.extend(y_data)
+	return np.array(list_train), np.array(temp_train)
 
 def convert_train_data_from(audioFileName, vowel, data_list):
 	x = 1
-	temp2_train = np.empty(shape=[0, 2])
+	#temp2_train = np.empty(shape=1)
+	temp2_train = []
 	while True:
 		audiofile = 'AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
@@ -54,9 +55,13 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		xarray = range(len(yArrayValues))
 		plt.plot(xarray, yArrayValues)
 		data_list.append(yArrayValues)
-		if audioFileName == 'matthijs':
-			temp2_train = np.append(temp2_train, [[1, 0]], axis=0)
+		if audioFileName == 'matthijsTest':
+			temp2_train.append(1)
 		else:
-			temp2_train = np.append(temp2_train, [[0, 1]], axis=0)
+			temp2_train.append(0)
 		x += 1
 	return data_list, temp2_train
+
+f = open('storeTest1.pckl', 'wb')
+pickle.dump(convert_train_data('E'), f)
+f.close()
