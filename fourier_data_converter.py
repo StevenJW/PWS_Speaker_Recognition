@@ -28,7 +28,7 @@ goodvalues = int(181855 / 4)
 
 plswork = []
 #int(goodvalues*0.015)
-for i in range(0, int(goodvalues*0.14), 6):
+for i in range(0, int(goodvalues*0.14), 4):
 	idx = np.where(xvalues==xvalues[i])
 	plswork.append(yvalues[idx]/(1* (10**7)))
 
