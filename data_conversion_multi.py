@@ -8,14 +8,16 @@ import wave
 import sys
 import pickle
 
-fileName1 = 'stevenTest'
-fileName2 = 'matthijsTest'
-storeFile = 'storeMulti-Test10'
+fileName1 = 'steven'
+fileName2 = 'matthijs'
+storeFile = 'store-AllData-Multi'
 z = 50
 
 def convert_train_data(audioVowel):
 	global fileName1
 	global fileName2
+
+	# Train data
 	temp_train = []
 	list_train = []
 	list_train, y_data = convert_train_data_from(fileName1, audioVowel, list_train)
@@ -23,7 +25,18 @@ def convert_train_data(audioVowel):
 
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	return np.array(list_train), np.array(temp_train)
+
+	# Test data
+	temp_train_test = []
+	list_train_test = []
+	list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
+	temp_train.extend(y_data)
+
+	list_train, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
+	temp_train.extend(y_data)
+
+	# Return Data
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
@@ -75,6 +88,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		else:
 			temp2_train.append([0, 1])
 		x += 1
+		print('File: ' + str(x))
 	return data_list, temp2_train
 
 f = open(storeFile + '.pckl', 'wb')

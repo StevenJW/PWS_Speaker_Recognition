@@ -8,13 +8,13 @@ trainFile = 'storeMulti-95'
 testFile = 'storeMulti-Test10'
 
 f = open(trainFile + '.pckl', 'rb')
-x_train, y_train = pickle.load(f)
+x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
 
 # Test data
-t = open(testFile + '.pckl', 'rb')
-x_test, y_test = pickle.load(t)
-t.close()
+#t = open(testFile + '.pckl', 'rb')
+#x_test, y_test = pickle.load(t)
+#t.close()
 
 neurons = 800
 activation_func = 'relu'

@@ -1,16 +1,22 @@
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
+from keras import optimizers
+import sys
+
 import pickle
 
-# Train data
-f = open('store1.pckl', 'rb')
-x_train, y_train = pickle.load(f)
+# Get train data files
+trainFile = 'store-AllData-Duplicate'
+#testFile = 'storeMulti-Test10'
+
+f = open(trainFile + '.pckl', 'rb')
+x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
 
 # Test data
-t = open('storeTest1.pckl', 'rb')
-x_test, y_test = pickle.load(t)
-t.close()
+#t = open('storeTest1.pckl', 'rb')
+#x_test, y_test = pickle.load(t)
+#t.close()
 
 neurons = 800
 activation_func = 'relu'

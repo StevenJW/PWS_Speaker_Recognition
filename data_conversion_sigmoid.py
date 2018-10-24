@@ -8,28 +8,42 @@ import wave
 import sys
 import pickle
 
-fileName1 = 'stevenTest'
-fileName2 = 'matthijsTest'
-storeFile = 'store1Test'
+fileName1 = 'steven'
+fileName2 = 'matthijs'
+storeFile = 'store-AllData-Duplicate'
 z = 50
 
 def convert_train_data(audioVowel):
 	global fileName1
 	global fileName2
+
+	# Train Data
+	print('Train data')
 	temp_train = []
 	list_train = []
 	list_train, y_data = convert_train_data_from(fileName1, audioVowel, list_train)
 	temp_train.extend(y_data)
-
+	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	return np.array(list_train), np.array(temp_train)
+
+
+	# Test data
+	print('Test data')
+	temp_train_test = []
+	list_train_test = []
+	list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
+
+	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
+
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
 	global z
 	x = 1
-	#temp2_train = np.empty(shape=1)
 	temp2_train = []
 	while True:
 		'''if x == 4 and audioFileName == fileName2:
@@ -66,18 +80,22 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 
 
 		xarray = range(len(yArrayValues))
-		plt.plot(xarray, yArrayValues)
-		plt.title(audiofile)
+		# For plotting a graph
+		#plt.plot(xarray, yArrayValues)
+		#plt.title(audiofile)
 		data_list.append(yArrayValues)
 		if audioFileName == fileName2:
 			temp2_train.append(1)
 		else:
 			temp2_train.append(0)
+		print('File: ' + str(x))
 		x += 1
 	return data_list, temp2_train
 
 f = open(storeFile + '.pckl', 'wb')
 pickle.dump(convert_train_data('E'), f)
 f.close()
-#patat = convert_train_data('E')
-#plt.show()
+
+# For Plotting a graph
+# callFunc = convert_train_data('E')
+# plt.show()
