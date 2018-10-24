@@ -27,8 +27,8 @@ model.add(Dropout(0.2))
 # Output layer
 model.add(Dense(1, kernel_initializer="uniform", activation='sigmoid'))
 
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='adam')
 
-model.fit(x_train, y_train, epochs=12, batch_size=5, validation_data=(x_test, y_test))
+model.fit(x_train, y_train, epochs=30, batch_size=5, validation_data=(x_test, y_test))
 score = model.evaluate(x_test, y_test, batch_size=1)
 print(score)

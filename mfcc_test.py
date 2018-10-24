@@ -5,7 +5,7 @@ import librosa
 import librosa.display
 from scipy.io import wavfile as wav
 
-audiofile = 'AudioFiles/KamerMatthijs1.wav'
+audiofile = 'AudioFiles/Ematthijs1.wav'
 
 x, fs = librosa.load(audiofile)
 mfccs = librosa.feature.mfcc(x, sr=fs)
