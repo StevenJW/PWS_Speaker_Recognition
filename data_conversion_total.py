@@ -11,39 +11,46 @@ import pickle
 fileName1 = 'steven'
 fileName2 = 'matthijs'
 z = 50
-type-multi = True
+typeMulti = False
 testFile = False
 
-if type-multi == True:
-	if testFile == True:
-		storeFile = 'store_1_multi-test'
-	else:
-		storeFile = 'store_1_multi'
+if typeMulti == True:
+	storeFile = 'store_1_multi'
 else:
-	if testFile == True:
-		storeFile = 'store_1_sigmoid-test'
-	else:
-		storeFile = 'store_1_sigmoid'
+	storeFile = 'store_1_sigmoid'
 
 
 def convert_train_data(audioVowel):
 	global fileName1
 	global fileName2
+
+	# Train Data
+	print('Train data')
 	temp_train = []
 	list_train = []
-	if type-multi == True:
-		list_train, y_data = convert_train_data_from(fileName1, audioVowel, list_train)
-		temp_train.extend(y_data)
-
+	print('Steven train data')
+	list_train, y_data = convert_train_data_from(fileName1, audioVowel, list_train)
+	temp_train.extend(y_data)
+	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	return np.array(list_train), np.array(temp_train)
+
+	# Test data
+	print('Test data')
+	temp_train_test = []
+	list_train_test = []
+	list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
+
+	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
+
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
 	global z
 	x = 1
-	#temp2_train = np.empty(shape=1)
 	temp2_train = []
 	while True:
 		print(x)
@@ -84,7 +91,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		plt.plot(xarray, yArrayValues)
 		plt.title(audiofile)
 		data_list.append(yArrayValues)
-		if type-multi == True:
+		if typeMulti == True:
 			if audioFileName == fileName2:
 				temp2_train.append([1, 0])
 			else:
