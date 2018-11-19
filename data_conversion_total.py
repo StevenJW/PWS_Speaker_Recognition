@@ -10,47 +10,56 @@ import pickle
 
 fileName1 = 'steven'
 fileName2 = 'matthijs'
-z = 50
-type-multi = True
+typeMulti = True
 testFile = False
 
-if type-multi == True:
-	if testFile == True:
-		storeFile = 'store_1_multi-test'
-	else:
-		storeFile = 'store_1_multi'
+z = 1
+if typeMulti:
+	storeFile = 'store_1_multi_'
+	while Path(storeFile + str(z)).is_file():
+		z += 1
+	storeFile = storeFile + str(z)
 else:
-	if testFile == True:
-		storeFile = 'store_1_sigmoid-test'
-	else:
-		storeFile = 'store_1_sigmoid'
+	storeFile = 'store_1_sigmoid_'
+	while Path(storeFile + str(z)).is_file():
+		z += 1
+	storeFile = storeFile + str(z)
 
 
 def convert_train_data(audioVowel):
 	global fileName1
 	global fileName2
+
+	# Train Data
+	print('Train data')
 	temp_train = []
 	list_train = []
-	if type-multi == True:
-		list_train, y_data = convert_train_data_from(fileName1, audioVowel, list_train)
-		temp_train.extend(y_data)
-
+	print('Steven train data')
+	list_train, y_data = convert_train_data_from(fileName1, audioVowel, list_train)
+	temp_train.extend(y_data)
+	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	return np.array(list_train), np.array(temp_train)
+	
+	# Test data
+	print('Test data')
+	temp_train_test = []
+	list_train_test = []
+	list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
+
+	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
+
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
-	global z
 	x = 1
-	#temp2_train = np.empty(shape=1)
 	temp2_train = []
 	while True:
 		print(x)
-		'''if x == 4 and audioFileName == fileName2:
-			x += 1
-		if x == 13 and audioFileName == fileName2:
-			x += 2'''
+
 		audiofile = 'AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
 			spf = wave.open(audiofile,'r')
@@ -73,18 +82,18 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 
 		# Create new array for new graph of values
 		yArrayValues = []
-		for i in range(0, int(goodvalues*0.14), 4):
+		for i in range(0, int(goodvalues*0.14), 8):
 			idx = np.where(xvalues==xvalues[i])
 			yArrayValues.extend(yvalues[idx]/(1* (10**7)))
-			if i == 3196:
+			if i >= 3996:
 				break
 
 
 		xarray = range(len(yArrayValues))
-		plt.plot(xarray, yArrayValues)
-		plt.title(audiofile)
+		#plt.plot(xarray, yArrayValues)
+		#plt.title(audiofile)
 		data_list.append(yArrayValues)
-		if type-multi == True:
+		if typeMulti == True:
 			if audioFileName == fileName2:
 				temp2_train.append([1, 0])
 			else:
