@@ -15,7 +15,7 @@ testFile = False
 
 z = 1
 if typeMulti:
-	storeFile = 'store_1_multi_'
+	storeFile = 'store_1_multi_test_'
 	while Path(storeFile + str(z)).is_file():
 		z += 1
 	storeFile = storeFile + str(z)
@@ -31,6 +31,7 @@ def convert_train_data(audioVowel):
 	global fileName2
 
 	# Train Data
+	"""
 	print('Train data')
 	temp_train = []
 	list_train = []
@@ -40,7 +41,8 @@ def convert_train_data(audioVowel):
 	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	
+	"""
+
 	# Test data
 	print('Test data')
 	temp_train_test = []
@@ -51,14 +53,16 @@ def convert_train_data(audioVowel):
 	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
 	temp_train_test.extend(y_data)
 
-	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
+	return np.array(list_train_test), np.array(temp_train_test)#np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
-	x = 1
+	if audioFileName == (fileName2 + 'Test'):
+		x = 1
+	else:
+		x = 6
 	temp2_train = []
 	while True:
-		print(x)
 
 		audiofile = 'AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
@@ -66,6 +70,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		else: 
 			break
 
+		print(x)
 		#Extract Raw Audio from Wav File
 		signal = spf.readframes(-1)
 		signal = np.fromstring(signal, 'Int16')

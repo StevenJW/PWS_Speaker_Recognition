@@ -41,7 +41,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	model.fit(x_train, y_train, epochs=40, batch_size=5, validation_data=(x_test, y_test))
 	score = model.evaluate(x_test, y_test, batch_size=1)
 	print(score)
-	for x_indi in x_test:
+	for x_indi in x_individual:
 		indiArray = [x_indi]
 		print(model.predict(np.array(indiArray)))
 
@@ -55,6 +55,10 @@ else:
 
 f = open(trainFile + '.pckl', 'rb')
 x_train, y_train, x_test, y_test = pickle.load(f)
+f.close()
+
+f = open('store_1_multi_test_1.pckl', 'rb')
+x_individual, doncare = pickle.load(f)
 f.close()
 
 #f = open(trainFile + '_test_individual.pckl', 'rb')
