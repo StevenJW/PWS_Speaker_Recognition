@@ -4,8 +4,11 @@ import sys
 import wave
 
 import numpy
-import numpy as np
 import librosa
+import tflearn
+import skimage.io
+import numpy as np
+import tensorflow as tf
 
 class Source:  # labels
 	DIGIT_WAVES = './spoken_numbers_pcm.tar'
@@ -102,19 +105,18 @@ def one_hot_to_item(hot, items):
 
 
 #Actual thing
-import tflearn
 
 # Simple speaker recognition demo, with 99% accuracy in under a minute ( on digits sample )
 
 # | Adam | epoch: 030 | loss: 0.05330 - acc: 0.9966 -- iter: 0000/1000
 # 'predicted speaker for 9_Vicki_260 : result = ', 'Vicki'
-import tensorflow as tf
+
 print("You are using tensorflow version "+ tf.__version__) #+" tflearn version "+ tflearn.version)
 if tf.__version__ >= '0.12' and os.name == 'nt':
 	print("sorry, tflearn is not ported to tensorflow 0.12 on windows yet!(?)")
 	quit() # why? works on Mac?
 
-speakers = data.get_speakers()
+speakers = get_speakers()
 number_classes=len(speakers)
 print("speakers",speakers)
 

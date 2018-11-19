@@ -10,14 +10,20 @@ import pickle
 
 fileName1 = 'steven'
 fileName2 = 'matthijs'
-z = 50
-typeMulti = False
+typeMulti = True
 testFile = False
 
-if typeMulti == True:
-	storeFile = 'store_1_multi'
+z = 1
+if typeMulti:
+	storeFile = 'store_1_multi_'
+	while Path(storeFile + str(z)).is_file():
+		z += 1
+	storeFile = storeFile + str(z)
 else:
-	storeFile = 'store_1_sigmoid'
+	storeFile = 'store_1_sigmoid_'
+	while Path(storeFile + str(z)).is_file():
+		z += 1
+	storeFile = storeFile + str(z)
 
 
 def convert_train_data(audioVowel):
@@ -34,7 +40,7 @@ def convert_train_data(audioVowel):
 	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-
+	
 	# Test data
 	print('Test data')
 	temp_train_test = []
@@ -49,15 +55,11 @@ def convert_train_data(audioVowel):
 	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
-	global z
 	x = 1
 	temp2_train = []
 	while True:
 		print(x)
-		'''if x == 4 and audioFileName == fileName2:
-			x += 1
-		if x == 13 and audioFileName == fileName2:
-			x += 2'''
+
 		audiofile = 'AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
 			spf = wave.open(audiofile,'r')
@@ -80,16 +82,16 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 
 		# Create new array for new graph of values
 		yArrayValues = []
-		for i in range(0, int(goodvalues*0.14), 4):
+		for i in range(0, int(goodvalues*0.14), 8):
 			idx = np.where(xvalues==xvalues[i])
 			yArrayValues.extend(yvalues[idx]/(1* (10**7)))
-			if i == 3196:
+			if i >= 3996:
 				break
 
 
 		xarray = range(len(yArrayValues))
-		plt.plot(xarray, yArrayValues)
-		plt.title(audiofile)
+		#plt.plot(xarray, yArrayValues)
+		#plt.title(audiofile)
 		data_list.append(yArrayValues)
 		if typeMulti == True:
 			if audioFileName == fileName2:

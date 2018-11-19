@@ -6,7 +6,7 @@ import wave
 import sys
 
 
-audiofile = 'AudioFiles/Esteven1.wav'
+audiofile = 'AudioFiles/EstevenTest3.wav'
 spf = wave.open(audiofile,'r')
 
 #Extract Raw Audio from Wav File
@@ -28,7 +28,7 @@ goodvalues = int(181855 / 4)
 
 plswork = []
 #int(goodvalues*0.015)
-for i in range(0, int(goodvalues*0.14), 4):
+for i in range(0, int(goodvalues*0.14), 8):
 	idx = np.where(xvalues==xvalues[i])
 	plswork.append(yvalues[idx]/(1* (10**7)))
 

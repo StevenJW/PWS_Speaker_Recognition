@@ -3,18 +3,21 @@ from keras.layers.core import Dense, Dropout, Activation
 from keras import optimizers
 import pickle
 
-'''if typeMulti == True:
-	output_neurons = 2
-	output_activation_func = 'softmax'
-	loss_calculator = 'mean_squared_error'
-	trainFile = 'store_1_multi'
-else:
-	output_neurons = 1
-	output_activation_func = 'sigmoid'
-	loss_calculator = 'binary_crossentropy'
-	trainFile = 'store_1_sigmoid'''
+from scipy.io import wavfile as wav
+from scipy.fftpack import fft
+from pathlib import Path
+import numpy as np
+import wave
+import sys
+import pickle
+
 def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFile):
-	neurons = 800
+	global x_train
+	global y_train
+	global x_test
+	global y_test
+	global x_individual
+	neurons = 501
 	activation_func = 'relu'
 
 	model = Sequential()
@@ -23,10 +26,12 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 
 	# First hidden layer
 	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
-	model.add(Dropout(0.2))
-	# Second hidden layer
+
 	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
 	model.add(Dropout(0.5))
+
+	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
+	model.add(Dropout(0.2))
 
 	# Output layer
 	model.add(Dense(output_neurons, kernel_initializer="uniform", activation=output_activation_func))
@@ -36,16 +41,29 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	model.fit(x_train, y_train, epochs=40, batch_size=5, validation_data=(x_test, y_test))
 	score = model.evaluate(x_test, y_test, batch_size=1)
 	print(score)
+	for x_indi in x_test:
+		indiArray = [x_indi]
+		print(model.predict(np.array(indiArray)))
 
-typeMulti = False
-trainFile = 'store_1_sigmoid'
+
+typeMulti = True
+if typeMulti:
+	trainFile = 'store_1_multi_1'
+else:
+	trainFile = 'store_1_sigmoid_1'
+
 
 f = open(trainFile + '.pckl', 'rb')
 x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
 
+#f = open(trainFile + '_test_individual.pckl', 'rb')
+#x_individual, s = pickle.load(f)
+#f.close()
+
+
 if typeMulti:
-	tensorModel(2, 'softmax', 'mean_squared_error', trainFile)
+	tensorModel(2, 'softmax', 'categorical_crossentropy', trainFile)
 else: 
 	tensorModel(1, 'sigmoid', 'binary_crossentropy', trainFile)
 
