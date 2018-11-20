@@ -8,30 +8,11 @@ import wave
 import sys
 import pickle
 
-fileName1 = 'steven'
-fileName2 = 'matthijs'
-typeMulti = True
-testFile = False
-
-z = 1
-if typeMulti:
-	storeFile = 'store_1_multi_test_'
-	while Path(storeFile + str(z)).is_file():
-		z += 1
-	storeFile = storeFile + str(z)
-else:
-	storeFile = 'store_1_sigmoid_'
-	while Path(storeFile + str(z)).is_file():
-		z += 1
-	storeFile = storeFile + str(z)
-
-
 def convert_train_data(audioVowel):
 	global fileName1
 	global fileName2
 
 	# Train Data
-	"""
 	print('Train data')
 	temp_train = []
 	list_train = []
@@ -41,8 +22,7 @@ def convert_train_data(audioVowel):
 	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	"""
-
+	
 	# Test data
 	print('Test data')
 	temp_train_test = []
@@ -53,18 +33,15 @@ def convert_train_data(audioVowel):
 	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
 	temp_train_test.extend(y_data)
 
-	return np.array(list_train_test), np.array(temp_train_test)#np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
-	if audioFileName == (fileName2 + 'Test'):
-		x = 1
-	else:
-		x = 6
+	x = 1
 	temp2_train = []
 	while True:
 
-		audiofile = 'AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
+		audiofile = '../AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
 			spf = wave.open(audiofile,'r')
 		else: 
@@ -111,9 +88,30 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		x += 1
 	return data_list, temp2_train
 	
+
+fileName1 = 'steven'
+fileName2 = 'matthijs'
+typeMulti = True
+testFile = False
+
+z = 1
+if typeMulti:
+	storeFile = 'store_1_multi_test_'
+	while Path(storeFile + str(z)).is_file():
+		z += 1
+	z += 1
+	storeFile = storeFile + str(z)
+else:
+	storeFile = 'store_1_sigmoid_'
+	while Path(storeFile + str(z)).is_file():
+		z += 1
+	z += 1
+	storeFile = storeFile + str(z)
+
 f = open(storeFile + '.pckl', 'wb')
 pickle.dump(convert_train_data('E'), f)
 f.close()
+
 
 # Next 2 lines to show plot
 # callFunc = convert_train_data('E')
