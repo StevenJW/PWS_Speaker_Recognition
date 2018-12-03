@@ -31,7 +31,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	model.add(Dropout(0.2))
 
 	# Output layer
-	model.add(Dense(output_neurons, kernel_initializer="uniform"))
+	model.add(Dense(output_neurons, kernel_initializer="uniform", activation=output_activation_func))
 	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 	model.compile(loss=loss_calculator, optimizer=adam)
 
@@ -48,7 +48,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 
 typeMulti = True
 if typeMulti:
-	trainFile = 'store_1_multi_1'
+	trainFile = 'store_1_multi_5_2'
 else:
 	trainFile = 'store_1_sigmoid_1'
 

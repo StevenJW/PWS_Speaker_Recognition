@@ -23,7 +23,7 @@ def convert_train_data(audioVowel):
 	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-
+	
 	# Test data
 	print('Test data')
 	temp_train_test = []
@@ -54,11 +54,13 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		
 		x, fs = librosa.load(audiofile)
 		mfccs = librosa.feature.mfcc(x, sr=fs)
-		print(mfccs.shape)
 
 		#plt.plot(xarray, yArrayValues)
 		#plt.title(audiofile)
-		data_list.append(mfccs[19][0:120])
+		mfcc3 = mfccs[3][:120].tolist()
+		#mfcc5 = mfccs[5][:120].tolist()
+		mfcc_list = mfcc3 #+ mfcc5
+		data_list.append(mfcc_list)
 		if typeMulti == True:
 			if audioFileName == fileName2:
 				temp2_train.append([1, 0])
@@ -80,7 +82,7 @@ testFile = False
 
 z = 1
 if typeMulti:
-	storeFile = 'multi_'
+	storeFile = 'multi_mfcc_3_'
 	while True:
 		if not Path(storeFile + str(z) + '.pckl').is_file():
 			storeFile = storeFile + str(z)

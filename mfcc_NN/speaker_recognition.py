@@ -25,6 +25,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 
 	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
 	model.add(Dropout(0.5))
+
 	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
 	model.add(Dropout(0.2))
 
@@ -33,26 +34,28 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 	model.compile(loss=loss_calculator, optimizer=adam)
 
-	model.fit(x_train, y_train, epochs=100, batch_size=5, validation_data=(x_test, y_test))
+	model.fit(x_train, y_train, epochs=50, batch_size=5, validation_data=(x_test, y_test))
 	score = model.evaluate(x_test, y_test, batch_size=1)
 	print(score)
 	x = 0
+	#print(model.predict(x_individual[0]))
+	print('\n')
 	for x_indi in x_test:
 		x += 1
-		print(x)
+		#print(x_indi)
 		indiArray = [x_indi]
 		print(model.predict(np.array(indiArray)))
 
 
 typeMulti = True
 if typeMulti:
-	trainFile = 'multi_'
-	z = 1
-	while True:
-		if not Path(trainFile + str(z+1) + '.pckl').is_file():
-			trainFile = trainFile + str(z)
-			break
-		z += 1
+	trainFile = 'multi_mfcc_3_1'
+	#z = 1
+	#while True:
+	#	if not Path(trainFile + str(z+1) + '.pckl').is_file():
+	#		trainFile = trainFile + str(z)
+	#		break
+	#	z += 1
 else:
 	trainFile = 'store_1_sigmoid_1'
 
@@ -62,9 +65,9 @@ x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
 
 
-#f = open('multi_with_fake_1.pckl', 'rb')
-#la, lala, x_individual, dier = pickle.load(f)
-#f.close()
+f = open('multi_kamer_1.pckl', 'rb')
+x_individual, dier = pickle.load(f)
+f.close()
 
 
 if typeMulti:

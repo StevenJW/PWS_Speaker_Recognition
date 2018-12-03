@@ -39,7 +39,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
 	x = 1
 	temp2_train = []
-	while True:
+	while x<=8:
 
 		audiofile = '../AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
@@ -49,21 +49,28 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 
 		print(x)
 		#Extract Raw Audio from Wav File
+		print('readframes')
 		signal = spf.readframes(-1)
+		print('make int16 string')
 		signal = np.fromstring(signal, 'Int16')
+		print('get frame rate')
 		fs = spf.getframerate()
 		# Time and fft
+		print('fourier transf')
 		fft_out = fft(signal)
+		print('time')
 		Time=np.linspace(0, len(signal)/fs, num=len(signal))
 
 		# Get corresponding y values
 		xvalues = Time
+		print('time absolute')
 		yvalues = np.abs(fft_out)
 
 		goodvalues = int(181855 / 4)
 
 		# Create new array for new graph of values
 		yArrayValues = []
+		print('for loop')
 		for i in range(0, int(goodvalues*0.14), 8):
 			idx = np.where(xvalues==xvalues[i])
 			yArrayValues.extend(yvalues[idx]/(1* (10**7)))
@@ -96,7 +103,7 @@ testFile = False
 
 z = 1
 if typeMulti:
-	storeFile = 'store_1_multi_test_'
+	storeFile = 'store_1_multi_8_'
 	while Path(storeFile + str(z)).is_file():
 		z += 1
 	z += 1

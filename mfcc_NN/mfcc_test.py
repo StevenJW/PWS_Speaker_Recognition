@@ -15,14 +15,12 @@ colors = False
 
 z = 1
 while z <= 1:
-	audiofile = '../AudioFiles/Esteven' + str(z) + '.wav'
+	audiofile = '../AudioFiles/KamerSteven' + str(z) + '.wav'
 	if Path(audiofile).is_file():
 		x, fs = librosa.load(audiofile)
 		mfccs = librosa.feature.mfcc(x, sr=fs)
 		print(mfccs.shape)
-		print(mfccs[0])
-		print(mfccs[1])
-		print(mfccs[2])
+		print(mfccs[5])
 		print(mfccs[3])
 
 		if colors:
