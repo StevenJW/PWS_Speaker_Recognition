@@ -57,10 +57,13 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 
 		#plt.plot(xarray, yArrayValues)
 		#plt.title(audiofile)
-		mfcc3 = mfccs[3][:120].tolist()
-		#mfcc5 = mfccs[5][:120].tolist()
-		mfcc_list = mfcc3 #+ mfcc5
-		data_list.append(mfcc_list)
+		#print(mfccs.shape)
+		#mfcc_list = []
+		#for oneMFCC in mfccs:
+		#	mfcc_list += oneMFCC.tolist()
+		#print(len(mfcc_list))
+
+		data_list.append(mfccs.tolist())
 		if typeMulti == True:
 			if audioFileName == fileName2:
 				temp2_train.append([1, 0])
@@ -82,7 +85,7 @@ testFile = False
 
 z = 1
 if typeMulti:
-	storeFile = 'multi_mfcc_3_'
+	storeFile = 'mfcc_all_'
 	while True:
 		if not Path(storeFile + str(z) + '.pckl').is_file():
 			storeFile = storeFile + str(z)

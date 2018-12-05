@@ -1,6 +1,9 @@
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
 from keras import optimizers
+from keras.preprocessing import sequence
+from keras.layers import LSTM
+from keras.layers.embeddings import Embedding
 import pickle
 from pathlib import Path
 
@@ -13,20 +16,32 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	global x_test
 	global y_test
 	global x_individual
-	neurons = 120
+	neurons = 20
+	max_review_length = 20
+	#print(x_train.shape)
+	#x_train = sequence.pad_sequences(x_train, maxlen=max_review_length)
+	#x_test = sequence.pad_sequences(x_test, maxlen=max_review_length)
 	activation_func = 'relu'
 
+	embedding_vecor_length = 20
 	model = Sequential()
+
+	"""
+	model.add(Embedding(200, embedding_vecor_length, input_length=max_review_length))
+	model.add(Dropout(0.2))
+	model.add(LSTM(100))
+	model.add(Dropout(0.2))
+"""
 	# Input layer
 	model.add(Dense(neurons, kernel_initializer="uniform", input_dim=neurons, activation=activation_func))
 
 	# First hidden layer
-	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
+	model.add(Dense(int(neurons/2), kernel_initializer="uniform", activation=activation_func))
 
-	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
+	model.add(Dense(int(neurons/2/2), kernel_initializer="uniform", activation=activation_func))
 	model.add(Dropout(0.5))
 
-	model.add(Dense(neurons, kernel_initializer="uniform", activation=activation_func))
+	model.add(Dense(int(neurons/2/2/2), kernel_initializer="uniform", activation=activation_func))
 	model.add(Dropout(0.2))
 
 	# Output layer
@@ -34,7 +49,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 	model.compile(loss=loss_calculator, optimizer=adam)
 
-	model.fit(x_train, y_train, epochs=50, batch_size=5, validation_data=(x_test, y_test))
+	model.fit(x_train, y_train, epochs=20, batch_size=5, validation_data=(x_test, y_test))
 	score = model.evaluate(x_test, y_test, batch_size=1)
 	print(score)
 	x = 0
@@ -49,7 +64,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 
 typeMulti = True
 if typeMulti:
-	trainFile = 'multi_mfcc_3_1'
+	trainFile = 'mfcc_all_4'
 	#z = 1
 	#while True:
 	#	if not Path(trainFile + str(z+1) + '.pckl').is_file():
@@ -65,9 +80,9 @@ x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
 
 
-f = open('multi_kamer_1.pckl', 'rb')
-x_individual, dier = pickle.load(f)
-f.close()
+#f = open('multi_kamer_1.pckl', 'rb')
+#x_individual, dier = pickle.load(f)
+#f.close()
 
 
 if typeMulti:
