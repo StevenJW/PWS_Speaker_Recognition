@@ -39,7 +39,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
 	x = 1
 	temp2_train = []
-	while x<=8:
+	while True:
 
 		audiofile = '../AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
@@ -49,39 +49,42 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 
 		print(x)
 		#Extract Raw Audio from Wav File
-		print('readframes')
 		signal = spf.readframes(-1)
-		print('make int16 string')
 		signal = np.fromstring(signal, 'Int16')
-		print('get frame rate')
 		fs = spf.getframerate()
 		# Time and fft
-		print('fourier transf')
 		fft_out = fft(signal)
-		print('time')
 		Time=np.linspace(0, len(signal)/fs, num=len(signal))
 
 		# Get corresponding y values
 		xvalues = Time
-		print('time absolute')
 		yvalues = np.abs(fft_out)
 
 		goodvalues = int(181855 / 4)
 
 		# Create new array for new graph of values
 		yArrayValues = []
-		print('for loop')
 		for i in range(0, int(goodvalues*0.14), 8):
 			idx = np.where(xvalues==xvalues[i])
 			yArrayValues.extend(yvalues[idx]/(1* (10**7)))
 			if i >= 3996:
 				break
 
-
-		xarray = range(len(yArrayValues))
+		z=0
+		bigValue = 0
+		zArrayValues = []
+		for value in yArrayValues:
+			bigValue += value
+			if z == 10:
+				zArrayValues.append(bigValue/10)
+				bigValue = 0
+				z = 0
+			z += 1
+		print(zArrayValues)
+		xarray = range(len(zArrayValues))
 		#plt.plot(xarray, yArrayValues)
 		#plt.title(audiofile)
-		data_list.append(yArrayValues)
+		data_list.append(zArrayValues)
 		if typeMulti == True:
 			if audioFileName == fileName2:
 				temp2_train.append([1, 0])
@@ -103,17 +106,13 @@ testFile = False
 
 z = 1
 if typeMulti:
-	storeFile = 'store_1_multi_8_'
-	while Path(storeFile + str(z)).is_file():
+	storeFile = 'multi_per10_'
+	while True:
+		if not Path(storeFile + str(z) + '.pckl').is_file():
+			storeFile = storeFile + str(z)
+			break
 		z += 1
-	z += 1
-	storeFile = storeFile + str(z)
-else:
-	storeFile = 'store_1_sigmoid_'
-	while Path(storeFile + str(z)).is_file():
-		z += 1
-	z += 1
-	storeFile = storeFile + str(z)
+
 
 f = open(storeFile + '.pckl', 'wb')
 pickle.dump(convert_train_data('E'), f)
