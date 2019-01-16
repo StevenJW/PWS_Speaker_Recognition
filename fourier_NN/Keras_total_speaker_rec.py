@@ -13,9 +13,11 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	global y_train
 	global x_test
 	global y_test
+	global x_test1
+	global y_test1
 	neurons = 50
 	activation_func = 'relu'
-
+	print(x_train.shape)
 	model = Sequential()
 	# Input layer
 	model.add(Dense(neurons, kernel_initializer="uniform", input_dim=neurons, activation=activation_func))
@@ -53,19 +55,13 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 		indiArray = [x_indi]
 		print(model.predict(np.array(indiArray)))
 
-
 typeMulti = True
 if typeMulti:
 	trainFile = 'per10_three_3'
 
-
 f = open(trainFile + '.pckl', 'rb')
 x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
-
-#f = open('store_1_multi_test_2.pckl', 'rb')
-#x_individual, x_indi_test = pickle.load(f)
-#f.close()
 
 #f = open(trainFile + '_test_individual.pckl', 'rb')
 #x_individual, s = pickle.load(f)

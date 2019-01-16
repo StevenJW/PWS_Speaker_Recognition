@@ -6,7 +6,7 @@ import wave
 import sys
 
 
-audiofile = 'AudioFiles/EstevenTest3.wav'
+audiofile = '../AudioFiles/EstevenTest3.wav'
 spf = wave.open(audiofile,'r')
 
 #Extract Raw Audio from Wav File

@@ -26,7 +26,7 @@ def convert_train_data(audioVowel):
 	print('Henriet train data')
 	list_train, y_data = convert_train_data_from(fileName3, audioVowel, list_train)
 	temp_train.extend(y_data)
-
+	
 	# Test data
 	print('Test data')
 	temp_train_test = []
@@ -40,8 +40,9 @@ def convert_train_data(audioVowel):
 	print('Test henriet')
 	list_train_test, y_data = convert_train_data_from(fileName3 + 'Test', audioVowel, list_train_test)
 	temp_train_test.extend(y_data)
-	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
+	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
 	x = 1
