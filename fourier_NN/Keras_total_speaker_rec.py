@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
 from keras import optimizers
+from keras.models import model_from_json
 import pickle
 
 import numpy as np
@@ -35,9 +36,15 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	model.add(Dense(output_neurons, kernel_initializer="uniform", activation=output_activation_func))
 	adam = optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)
 	model.compile(loss=loss_calculator, optimizer=adam)
-
-	model.fit(x_train, y_train, epochs=200, batch_size=5, validation_data=(x_test, y_test))
+	print(y_test.shape)
+	model.fit(x_train, y_train, epochs=120, batch_size=5, validation_data=(x_test, y_test))
 	score = model.evaluate(x_test, y_test, batch_size=1)
+	model_json = model.to_json()
+	with open("model50.json", "w") as json_file:
+		json_file.write(model_json)
+	# serialize weights to HDF5
+	model.save_weights("model50.h5")
+	print("Saved model to disk")
 	print(score)
 	x = 0
 	for x_indi in x_test:
@@ -49,9 +56,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 
 typeMulti = True
 if typeMulti:
-	trainFile = 'multi_per10_1'
-else:
-	trainFile = 'store_1_sigmoid_1'
+	trainFile = 'per10_three_3'
 
 
 f = open(trainFile + '.pckl', 'rb')
@@ -68,9 +73,7 @@ f.close()
 
 
 if typeMulti:
-	tensorModel(2, 'softmax', 'mean_squared_error', trainFile)
-else: 
-	tensorModel(1, 'sigmoid', 'binary_crossentropy', trainFile)
+	tensorModel(3, 'softmax', 'mean_squared_error', trainFile)
 
 
 

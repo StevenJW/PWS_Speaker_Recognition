@@ -11,6 +11,7 @@ import pickle
 def convert_train_data(audioVowel):
 	global fileName1
 	global fileName2
+	global fileName3
 
 	# Train Data
 	print('Train data')
@@ -22,19 +23,25 @@ def convert_train_data(audioVowel):
 	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	
+	print('Henriet train data')
+	list_train, y_data = convert_train_data_from(fileName3, audioVowel, list_train)
+	temp_train.extend(y_data)
+
 	# Test data
 	print('Test data')
 	temp_train_test = []
 	list_train_test = []
+	print('Test steven')
 	list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
 	temp_train_test.extend(y_data)
-
+	print('Test matthijs')
 	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
 	temp_train_test.extend(y_data)
-
+	print('Test henriet')
+	list_train_test, y_data = convert_train_data_from(fileName3 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
 	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
-	
+
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
 	x = 1
@@ -44,12 +51,14 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 		audiofile = '../AudioFiles/'+ str(vowel) + str(audioFileName) + str(x) + '.wav'
 		if Path(audiofile).is_file():
 			spf = wave.open(audiofile,'r')
-		else: 
+		else:
 			break
 
 		print(x)
 		#Extract Raw Audio from Wav File
 		signal = spf.readframes(-1)
+		if not (len(signal) % 2 == 0):
+			signal = b"".join([signal, '\x00'.encode('utf-8')])
 		signal = np.fromstring(signal, 'Int16')
 		fs = spf.getframerate()
 		# Time and fft
@@ -80,33 +89,33 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 				bigValue = 0
 				z = 0
 			z += 1
-		print(zArrayValues)
 		xarray = range(len(zArrayValues))
 		#plt.plot(xarray, yArrayValues)
 		#plt.title(audiofile)
 		data_list.append(zArrayValues)
-		if typeMulti == True:
-			if audioFileName == fileName2:
-				temp2_train.append([1, 0])
-			else:
-				temp2_train.append([0, 1])
-		else:
-			if audioFileName == fileName2:
-				temp2_train.append(1)
-			else:
-				temp2_train.append(0)
+		if audioFileName == 'matthijs' or audioFileName == 'matthijsTest':
+			print('matthijs')
+			temp2_train.append([1, 0, 0])
+		elif audioFileName == 'steven' or audioFileName == 'stevenTest':
+			print('steven')
+			temp2_train.append([0, 1, 0])
+		elif audioFileName == 'henriet' or audioFileName == 'henrietTest':
+			print('henriet')
+			temp2_train.append([0, 0, 1])
 		x += 1
+	print(temp2_train)
 	return data_list, temp2_train
-	
+
 
 fileName1 = 'steven'
 fileName2 = 'matthijs'
+fileName3 = 'henriet'
 typeMulti = True
 testFile = False
 
 z = 1
 if typeMulti:
-	storeFile = 'multi_per10_'
+	storeFile = 'per10_three_'
 	while True:
 		if not Path(storeFile + str(z) + '.pckl').is_file():
 			storeFile = storeFile + str(z)
