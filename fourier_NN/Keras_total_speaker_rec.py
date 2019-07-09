@@ -13,7 +13,7 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	global y_train
 	global x_test
 	global y_test
-	global x_test1
+	global x_individual
 	global y_test1
 	neurons = 50
 	activation_func = 'relu'
@@ -41,32 +41,39 @@ def tensorModel(output_neurons, output_activation_func, loss_calculator, trainFi
 	print(y_test.shape)
 	model.fit(x_train, y_train, epochs=120, batch_size=5, validation_data=(x_test, y_test))
 	score = model.evaluate(x_test, y_test, batch_size=1)
+	print(score)
 	model_json = model.to_json()
-	with open("model50.json", "w") as json_file:
+	with open("model50_3.json", "w") as json_file:
 		json_file.write(model_json)
 	# serialize weights to HDF5
-	model.save_weights("model50.h5")
+	model.save_weights("model50_3.h5")
 	print("Saved model to disk")
-	print(score)
 	x = 0
-	for x_indi in x_test:
+	i = 0
+	for x_indi in x_individual:
 		x += 1
-		print(x)
-		indiArray = [x_indi]
-		print(model.predict(np.array(indiArray)))
+		if x >= 240:
+			print(x)
+			indiArray = [x_indi]
+			prediction = model.predict(np.array(indiArray))
+			if prediction[0][2] > 0.7:
+				print('yes')
+				i += 1
+			print(prediction)
+	print(i)
 
 typeMulti = True
-if typeMulti:
-	trainFile = 'per10_three_3'
+#if typeMulti:
+#	testFile = 'per10_three_3'
 
+trainFile = '3persons_3output_1'
 f = open(trainFile + '.pckl', 'rb')
 x_train, y_train, x_test, y_test = pickle.load(f)
 f.close()
 
-#f = open(trainFile + '_test_individual.pckl', 'rb')
-#x_individual, s = pickle.load(f)
-#f.close()
-
+f = open('per10_three_1.pckl', 'rb')
+x_individual, s, k, h = pickle.load(f)
+f.close()
 
 if typeMulti:
 	tensorModel(3, 'softmax', 'mean_squared_error', trainFile)
