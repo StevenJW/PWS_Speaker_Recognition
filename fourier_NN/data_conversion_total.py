@@ -14,7 +14,7 @@ def convert_train_data(audioVowel):
 	global fileName3
 
 	# Train Data
-	"""print('Train data')
+	print('Train data')
 	temp_train = []
 	list_train = []
 	print('Steven train data')
@@ -23,25 +23,20 @@ def convert_train_data(audioVowel):
 	print('Matthijs train data')
 	list_train, y_data = convert_train_data_from(fileName2, audioVowel, list_train)
 	temp_train.extend(y_data)
-	print('Henriet train data')
-	list_train, y_data = convert_train_data_from(fileName3, audioVowel, list_train)
-	temp_train.extend(y_data)"""
+
 	
 	# Test data
 	print('Test data')
 	temp_train_test = []
 	list_train_test = []
-	#print('Test steven')
-	#list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
-	#temp_train_test.extend(y_data)
+	print('Test steven')
+	list_train_test, y_data = convert_train_data_from(fileName1 + 'Test', audioVowel, list_train_test)
+	temp_train_test.extend(y_data)
 	print('Test matthijs')
 	list_train_test, y_data = convert_train_data_from(fileName2 + 'Test', audioVowel, list_train_test)
 	temp_train_test.extend(y_data)
-	#print('Test henriet')
-	#list_train_test, y_data = convert_train_data_from(fileName3 + 'Test', audioVowel, list_train_test)
-	#temp_train_test.extend(y_data)
 
-	#return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
+	return np.array(list_train), np.array(temp_train), np.array(list_train_test), np.array(temp_train_test)
 	
 def convert_train_data_from(audioFileName, vowel, data_list):
 	global fileName2
@@ -109,7 +104,7 @@ def convert_train_data_from(audioFileName, vowel, data_list):
 	print(temp2_train)
 	return data_list, temp2_train
 
-
+// filename format is: [vowel][name][number]
 fileName1 = 'steven'
 fileName2 = 'matthijs'
 fileName3 = 'henriet'
@@ -130,7 +125,3 @@ f = open(storeFile + '.pckl', 'wb')
 pickle.dump(convert_train_data('E'), f)
 f.close()
 
-
-# Next 2 lines to show plot
-# callFunc = convert_train_data('E')
-# plt.show()
